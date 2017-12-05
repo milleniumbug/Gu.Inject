@@ -3,7 +3,6 @@ namespace Gu.Inject
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using Gu.Inject.Shims;
 
     /// <summary>
     /// Thrown when resolution failed because there were more than one possible type to resolve.
@@ -15,12 +14,12 @@ namespace Gu.Inject
         /// </summary>
         /// <param name="type">The type that has no binding.</param>
         /// <param name="mapped">The bindings found by scanning the assemblies.</param>
-        public AmbiguousBindingException(Type type, ReadOnlyList<Type> mapped)
+        public AmbiguousBindingException(Type type, IEnumerable<Type> mapped)
             : base(type, mapped, CreateMessage(type, mapped))
         {
         }
 
-        private static string CreateMessage(Type type, ReadOnlyList<Type> mapped)
+        private static string CreateMessage(Type type, IEnumerable<Type> mapped)
         {
             return $"Type {type.PrettyName()} has more than one binding: {string.Join(", ", mapped.Select(TypeExt.PrettyName).ToArray())}.";
         }

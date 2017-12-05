@@ -7,7 +7,7 @@
     /// IReadOnlyList shim for .NET 3.5
     /// </summary>
     /// <typeparam name="TElement">Element type</typeparam>
-    public class ReadOnlyList<TElement> : IEnumerable<TElement>
+    internal class ReadOnlyList<TElement> : IEnumerable<TElement>
     {
         private readonly IList<TElement> collection;
 

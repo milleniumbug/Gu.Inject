@@ -2,7 +2,6 @@ namespace Gu.Inject
 {
     using System;
     using System.Collections.Generic;
-    using Gu.Inject.Shims;
 
     /// <summary>
     /// Thrown when resolution failed.
@@ -15,7 +14,7 @@ namespace Gu.Inject
         /// <param name="type">The type that was resolved.</param>
         /// <param name="mapped">The mapped types.</param>
         /// <param name="message">The exception message.</param>
-        protected BindingException(Type type, ReadOnlyList<Type> mapped, string message)
+        protected BindingException(Type type, IEnumerable<Type> mapped, string message)
             : base(type, message)
         {
             this.Mapped = mapped;
@@ -24,6 +23,6 @@ namespace Gu.Inject
         /// <summary>
         /// Gets the candidate types to resolve.
         /// </summary>
-        public ReadOnlyList<Type> Mapped { get; }
+        public IEnumerable<Type> Mapped { get; }
     }
 }
