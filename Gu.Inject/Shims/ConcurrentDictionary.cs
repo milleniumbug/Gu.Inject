@@ -51,6 +51,14 @@
                 else
                 {
                     value = factory(key);
+
+                    // double checking because the factory can add an element as a side effect
+                    exists = this.collection.TryGetValue(key, out var ignored);
+                    if (exists)
+                    {
+                        this.collection.Remove(key);
+                    }
+
                     this.collection.Add(key, value);
                     return value;
                 }
