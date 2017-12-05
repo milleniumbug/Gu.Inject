@@ -1,10 +1,10 @@
 ﻿namespace Gu.Inject
 {
     using System;
-    using System.Collections.Concurrent;
     using System.Linq;
     using System.Reflection;
     using System.Runtime.CompilerServices;
+    using Gu.Inject.Shims;
 
     /// <summary>
     /// A factory for resolving object graphs.
@@ -17,7 +17,7 @@
         /// <summary>
         /// This notifies before creating an instance of a type.
         /// </summary>
-        public event EventHandler<Type> Creating;
+        public event Gu.Inject.Shims.EventHandler<Type> Creating;
 
         /// <summary>
         /// Provide an override to the automatic mapping.
@@ -61,7 +61,7 @@
             }
 
             this.ThrowIfDisposed();
-            this.ThrowIfHasResolved();
+            this.ThrowIfHasResolved(nameof(Bind));
             this.BindCore(from, to);
         }
 
@@ -81,7 +81,7 @@
             }
 
             this.ThrowIfDisposed();
-            this.ThrowIfHasResolved();
+            this.ThrowIfHasResolved(nameof(BindInstance));
             this.BindCore(typeof(T), instance);
         }
 
@@ -101,7 +101,7 @@
             }
 
             this.ThrowIfDisposed();
-            this.ThrowIfHasResolved();
+            this.ThrowIfHasResolved(nameof(BindFactory));
             this.BindCore(typeof(T), new Factory<T>(create));
         }
 
@@ -121,7 +121,7 @@
             }
 
             this.ThrowIfDisposed();
-            this.ThrowIfHasResolved();
+            this.ThrowIfHasResolved(nameof(BindFactory));
             this.BindCore(typeof(T), new Factory<T>(() => create(this)));
         }
 
@@ -142,7 +142,7 @@
             }
 
             this.ThrowIfDisposed();
-            this.ThrowIfHasResolved();
+            this.ThrowIfHasResolved(nameof(BindFactory));
             this.BindCore(typeof(T), new Factory<TArg, T>(create));
         }
 
@@ -165,7 +165,7 @@
         public void ReBind(Type from, Type to)
         {
             this.ThrowIfDisposed();
-            this.ThrowIfHasResolved();
+            this.ThrowIfHasResolved(nameof(ReBind));
             this.RebindCore(@from, to);
         }
 
@@ -185,7 +185,7 @@
             }
 
             this.ThrowIfDisposed();
-            this.ThrowIfHasResolved();
+            this.ThrowIfHasResolved(nameof(ReBindInstance));
             this.RebindCore(typeof(T), instance);
         }
 
@@ -205,7 +205,7 @@
             }
 
             this.ThrowIfDisposed();
-            this.ThrowIfHasResolved();
+            this.ThrowIfHasResolved(nameof(ReBindFactory));
             this.RebindCore(typeof(T), new Factory<T>(create));
         }
 
@@ -389,7 +389,7 @@
             }
         }
 
-        private void ThrowIfHasResolved([CallerMemberName] string caller = null)
+        private void ThrowIfHasResolved(string caller)
         {
             if (this.created.Count != 0)
             {

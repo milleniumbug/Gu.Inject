@@ -3,10 +3,11 @@ namespace Gu.Inject
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
+    using Gu.Inject.Shims;
 
     internal class Factory<T> : IFactory
     {
-        private static readonly IReadOnlyList<Type> Empty = new Type[0];
+        private static readonly ReadOnlyList<Type> Empty = new ReadOnlyList<Type>();
 
         private readonly Func<T> creator;
 
@@ -15,7 +16,7 @@ namespace Gu.Inject
             this.creator = creator;
         }
 
-        public IReadOnlyList<Type> ParameterTypes => Empty;
+        public ReadOnlyList<Type> ParameterTypes => Empty;
 
         public object Create(object[] args)
         {

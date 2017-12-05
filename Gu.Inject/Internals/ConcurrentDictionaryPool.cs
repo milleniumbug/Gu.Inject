@@ -1,6 +1,6 @@
 ﻿namespace Gu.Inject
 {
-    using System.Collections.Concurrent;
+    using Gu.Inject.Shims;
 
     internal static class ConcurrentDictionaryPool<TKey, TValue>
     {

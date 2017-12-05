@@ -2,6 +2,7 @@ namespace Gu.Inject
 {
     using System;
     using System.Collections.Generic;
+    using Gu.Inject.Shims;
 
     /// <summary>
     /// Thrown when resolution failed because there was no binding.
@@ -13,7 +14,7 @@ namespace Gu.Inject
         /// </summary>
         /// <param name="type">The type that has no binding.</param>
         /// <param name="mapped">Always empty.</param>
-        public NoBindingException(Type type, IReadOnlyList<Type> mapped)
+        public NoBindingException(Type type, ReadOnlyList<Type> mapped)
             : base(type, mapped, CreateMessage(type))
         {
         }

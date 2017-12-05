@@ -1,10 +1,10 @@
 ﻿namespace Gu.Inject
 {
     using System;
-    using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
+    using Gu.Inject.Shims;
 
     internal static class Ctor
     {
@@ -26,9 +26,9 @@
             }
 
             var ctor = ctors[0];
-            var parameters = ctor.GetParameters()
+            var parameters = new ReadOnlyList<Type>(ctor.GetParameters()
                                  .Select(x => x.ParameterType)
-                                 .ToArray();
+                                 .ToArray());
 
             //if (ctor.IsPublic)
             //{
@@ -42,13 +42,13 @@
         {
             private readonly ConstructorInfo ctor;
 
-            public Factory(ConstructorInfo ctor, IReadOnlyList<Type> parameterTypes)
+            public Factory(ConstructorInfo ctor, ReadOnlyList<Type> parameterTypes)
             {
                 this.ctor = ctor;
                 this.ParameterTypes = parameterTypes;
             }
 
-            public IReadOnlyList<Type> ParameterTypes { get; }
+            public ReadOnlyList<Type> ParameterTypes { get; }
 
             public object Create(object[] args)
             {
@@ -60,13 +60,13 @@
         {
             private readonly Type type;
 
-            public CreateInstanceFactory(Type type, IReadOnlyList<Type> parameterTypes)
+            public CreateInstanceFactory(Type type, ReadOnlyList<Type> parameterTypes)
             {
                 this.type = type;
                 this.ParameterTypes = parameterTypes;
             }
 
-            public IReadOnlyList<Type> ParameterTypes { get; } 
+            public ReadOnlyList<Type> ParameterTypes { get; }
 
             public object Create(object[] args)
             {

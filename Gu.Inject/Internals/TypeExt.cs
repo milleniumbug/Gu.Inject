@@ -2,6 +2,7 @@
 {
     using System;
     using System.Linq;
+    using Gu.Inject.Shims;
 
     /// <summary>
     /// Helpers for <see cref="Type"/>
@@ -40,7 +41,7 @@
 
             if (type.IsGenericType)
             {
-                var arguments = string.Join(", ", type.GenericTypeArguments.Select(PrettyName));
+                var arguments = string.Join(", ", type.GenericTypeArguments().Select(PrettyName).ToArray());
 
                 if (type.DeclaringType != null)
                 {

@@ -1,26 +1,26 @@
 ﻿namespace Gu.Inject
 {
     using System;
-    using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
+    using Gu.Inject.Shims;
 
     internal static class TypeMap
     {
-        private static readonly IReadOnlyList<Type> Empty = new Type[0];
+        private static readonly ReadOnlyList<Type> Empty = new ReadOnlyList<Type>();
         private static ConcurrentDictionary<Type, List<Type>> cache;
 
         internal static bool IsInitialized => cache != null;
 
-        internal static IReadOnlyList<Type> GetMapped(Type type)
+        internal static ReadOnlyList<Type> GetMapped(Type type)
         {
             if (type.IsSealed)
             {
                 return Empty;
             }
 
-            return cache.GetOrAdd(type, CreateMapped);
+            return new ReadOnlyList<Type>(cache.GetOrAdd(type, CreateMapped));
         }
 
         internal static void Initialize(Assembly root, bool recursive = true)
@@ -53,7 +53,7 @@
                     {
                         mappedTypes.Add(
                             mapped.IsGenericTypeDefinition
-                                ? mapped.MakeGenericType(type.GenericTypeArguments)
+                                ? mapped.MakeGenericType(type.GenericTypeArguments())
                                 : mapped);
                     }
 

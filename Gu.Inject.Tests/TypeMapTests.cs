@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using Gu.Inject.Shims;
     using Gu.Inject.Tests.Types;
     using NUnit.Framework;
 
@@ -36,6 +37,11 @@
             TypeMap.Initialize(typeof(With<>).Assembly, false);
             var actual = TypeMap.GetMapped(texCase.Type);
             Assert.AreEqual(AsString(texCase.Expected), AsString(actual));
+        }
+
+        private static string AsString(ReadOnlyList<Type> types)
+        {
+            return string.Join(", ", types.Select(t => t.PrettyName()));
         }
 
         private static string AsString(IReadOnlyList<Type> types)
